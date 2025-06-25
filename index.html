@@ -1,159 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scientific Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #1e1e1e;
-      margin: 0;
-    }
-    .calculator {
-      background: #2c2c2c;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 0 20px #000;
-      color: white;
-      width: 90vw;
-      max-width: 350px;
-      box-sizing: border-box;
-    }
-    .display {
-      background: #000;
-      color: #0f0;
-      padding: 20px;
-      text-align: right;
-      font-size: 1.5em;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      min-height: 40px;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-    .buttons-container {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
-    .button-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      min-width: 100%;
-      scroll-snap-align: start;
-      padding-bottom: 10px;
-    }
-    button {
-      padding: 18px;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 8px;
-      background-color: #444;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #555;
-    }
-    @media (max-width: 400px) {
-      button {
-        padding: 14px;
-        font-size: 1em;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
+    <link rel="stylesheet" href="newIndex.css">
 <body>
-  <div class="calculator">
-    <div class="display" id="display"></div>
-    <div class="buttons-container">
-      <div class="button-grid">
-        <button onclick="clearDisplay()">AC</button>
-        <button onclick="backspace()">⌫</button>
-        <button onclick="append('%')">%</button>
-        <button onclick="operate('/')">÷</button>
-        <button onclick="append('7')">7</button>
-        <button onclick="append('8')">8</button>
-        <button onclick="append('9')">9</button>
-        
-        
-
-        <button onclick="append('4')">4</button>
-        <button onclick="append('5')">5</button>
-        <button onclick="append('6')">6</button>
-        <button onclick="operate('*')">×</button>
-
-        <button onclick="append('1')">1</button>
-        <button onclick="append('2')">2</button>
-        <button onclick="append('3')">3</button>
-        <button onclick="operate('-')">−</button>
-
-        <button onclick="append('0')">0</button>
-        
-        
-        <button onclick="clearDisplay()">C</button>
-        <button onclick="operate('+')">+</button>
-        
-        <button onclick="calculate()">=</button>
-        
-        
-        <button onclick="append('.')">.</button>
-        
-      </div>
-
-      <div class="button-grid">
-        <button onclick="append('**2')">x²</button>
-        <button onclick="append('**0.5')">√x</button>
-        <button onclick="append('Math.sin(')">sin(</button>
-        <button onclick="append('Math.cos(')">cos(</button>
-        <button onclick="append('Math.tan(')">tan(</button>
-        <button onclick="append('Math.PI')">π</button>
-
-        <button onclick="append('Math.log10(')">log₁₀(</button>
-        <button onclick="append('Math.log(')">ln(</button>
-        <button onclick="append('Math.E')">e</button>
-        <button onclick="append('(')">(</button>
-
-        <button onclick="append(')')">)</button>
-        <button onclick="append('**')">^</button>
-        
-      </div>
-    </div>
+    <div class="calculator">
+  <div class="calculator__output">0</div>
+  <div class="calculator__keys">
+    <button class="calculator__key calculator__key--operator">+</button>
+    <button class="calculator__key calculator__key--operator">-</button>
+    <button class="calculator__key calculator__key--operator">&times;</button>
+    <button class="calculator__key calculator__key--operator">÷</button>
+    <button class="calculator__key">7</button>
+    <button class="calculator__key">8</button>
+    <button class="calculator__key">9</button>
+    <button class="calculator__key">4</button>
+    <button class="calculator__key">5</button>
+    <button class="calculator__key">6</button>
+    <button class="calculator__key">1</button>
+    <button class="calculator__key">2</button>
+    <button class="calculator__key">3</button>
+    <button class="calculator__key">0</button>
+    <button class="calculator__key">.</button>
+    <button class="calculator__key">AC</button>
+    <button class="calculator__key calculator__key--enter">=</button>
   </div>
+</div>
+<script>
+  const output = document.querySelector('.calculator__output');
+  const keys = document.querySelector('.calculator__keys');
 
-  <script>
-    let display = document.getElementById('display');
+  let firstValue = '';
+  let operator = '';
+  let awaitingNextValue = false;
 
-    function append(char) {
-      display.textContent += char;
-    }
+  function calculate(first, operator, second) {
+    first = parseFloat(first);
+    second = parseFloat(second);
 
-    function clearDisplay() {
-      display.textContent = '';
-    }
+    if (operator === '+') return first + second;
+    if (operator === '-') return first - second;
+    if (operator === '×') return first * second;
+    if (operator === '÷') return second !== 0 ? first / second : 'Error';
+    return second;
+  }
 
-    function backspace() {
-      display.textContent = display.textContent.slice(0, -1);
-    }
+  keys.addEventListener('click', (e) => {
+    const key = e.target;
+    const value = key.textContent;
+    const displayValue = output.textContent;
 
-    function operate(op) {
-      display.textContent += op;
-    }
+    if (!key.classList.contains('calculator__key')) return;
 
-    function calculate() {
-      try {
-        display.textContent = eval(display.textContent);
-      } catch {
-        display.textContent = 'Error';
+    // If it's a number or dot
+    if (!key.classList.contains('calculator__key--operator') && value !== '=' && value !== 'AC') {
+      if (awaitingNextValue) {
+        output.textContent = value === '.' ? '0.' : value;
+        awaitingNextValue = false;
+      } else {
+        output.textContent =
+          displayValue === '0' && value !== '.' ? value : displayValue + value;
       }
     }
-  </script>
+
+    // If it's an operator
+    if (key.classList.contains('calculator__key--operator')) {
+      if (firstValue && operator && !awaitingNextValue) {
+        const result = calculate(firstValue, operator, displayValue);
+        output.textContent = result;
+        firstValue = result;
+      } else {
+        firstValue = displayValue;
+      }
+      operator = value;
+      awaitingNextValue = true;
+    }
+
+    // Equals key
+    if (value === '=') {
+      if (firstValue && operator) {
+        const result = calculate(firstValue, operator, displayValue);
+        output.textContent = result;
+        firstValue = '';
+        operator = '';
+        awaitingNextValue = true;
+      }
+    }
+
+    // Clear key
+    if (value === 'AC') {
+      output.textContent = '0';
+      firstValue = '';
+      operator = '';
+      awaitingNextValue = false;
+    }
+  });
+</script>
+
+    
 </body>
+
 </html>
